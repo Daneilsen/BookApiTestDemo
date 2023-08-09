@@ -21,7 +21,7 @@ namespace BookApi.Tests
                     Title = "The Three-Body Problem",
                     Author = "Cixin Liu",
                     ISBN = "9780765382030",
-                    PublishedDate = new DateTime(1851, 10, 18)
+                    PublishedDate = new DateTime(2016, 1, 12)
                 });
 
             var controller = new BookController(mockBookService.Object);
