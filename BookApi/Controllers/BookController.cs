@@ -25,5 +25,17 @@ namespace BookApi.Controllers
             }
             return Ok(book);
         }
+
+        [HttpGet("author/{authorName}")]
+        public IActionResult GetBooksByAuthor(string authorName)
+        {
+            var books = _bookService.GetBooksByAuthor(authorName);
+            if (!books.Any())
+            {
+                return NotFound();
+            }
+            return Ok(books);
+        }
+
     }
 }

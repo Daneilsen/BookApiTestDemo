@@ -51,6 +51,47 @@ namespace BookApi.Tests
             // Assert
             Assert.IsType<NotFoundResult>(result);
         }
+
+        [Fact]
+        public void GetBooksByAuthor_ReturnsBooks_WhenAuthorExists()
+        {
+            // Arrange
+            var mockBookService = new Mock<IBookService>();
+            var mockBooks = new List<Book>
+            {
+                new Book { Id = 1, Title = "Book 1", Author = "John Doe" },
+                new Book { Id = 2, Title = "Book 2", Author = "John Doe" }
+            };
+
+            mockBookService.Setup(svc => svc.GetBooksByAuthor("John Doe")).Returns(mockBooks);
+
+            var controller = new BookController(mockBookService.Object);
+
+            // Act
+            var result = controller.GetBooksByAuthor("John Doe");
+
+            // Assert
+            var okResult = Assert.IsType<OkObjectResult>(result);
+            var returnedBooks = Assert.IsType<List<Book>>(okResult.Value);
+            Assert.Equal(2, returnedBooks.Count);
+            Assert.Equal("John Doe", returnedBooks.First().Author);
+        }
+
+        [Fact]
+        public void GetBooksByAuthor_ReturnsNotFound_WhenAuthorDoesNotExist()
+        {
+            // Arrange
+            var mockBookService = new Mock<IBookService>();
+            mockBookService.Setup(svc => svc.GetBooksByAuthor("Jane Doe")).Returns(new List<Book>());
+
+            var controller = new BookController(mockBookService.Object);
+
+            // Act
+            var result = controller.GetBooksByAuthor("Jane Doe");
+
+            // Assert
+            Assert.IsType<NotFoundResult>(result);
+        }
     }
 
 }
